@@ -43,10 +43,9 @@ void evoluciona(double *u_nuevo, double *u_presente, double *u_viejo, int n, dou
 int main(){
   double delta_x = 0.03, delta_t = 0.00001;
   double x_min = 0.0, x_max = 1.0;
-  double T = 0.5, c =1.0;
+  double c =1.0;
   double x=0;
-  int nx = (x_max-x_min)/delta_x + 1 ;
-  int nt = T/delta_t +1; 
+  int nx = (x_max-x_min)/delta_x + 1 ; 
   double *u_nuevo;
   double *u_viejo;
   double *u_ini;
@@ -59,23 +58,25 @@ int main(){
   u_in(u_viejo,delta_x,x_min, nx,x);
   u_in(u_presente,delta_x,x_min, nx,x);
   x=0;
-
- for(int j=1;j<nt;j++){
+  for(double j=0.51;j>-1;j-=0.5){
     u_nuevo[0]=0;
+    u_presente[0] =0;
     u_nuevo[nx-1]=0;
+    u_presente[nx-1] =0;
     primer_momento(u_presente,u_viejo,delta_x,delta_t, c,nx); 
     evoluciona(u_nuevo, u_presente, u_viejo, nx,delta_x, delta_t,c);
-   for(int i=0;i<nx;i++)
+    for(int i=0;i<nx;i++)
       {
 	u_viejo[i]=u_presente[i];
 	u_presente[i] = u_nuevo[i];
       }
+    }
+  
 
   for(int i=0;i<nx;i++)
     {
       x= x_min + i*delta_x;
-      cout<<x<<" "<< u_nuevo[i]<<" " << u_ini[i]<< endl;
+      cout<< x <<" "<< u_ini[i]<<" " << u_nuevo[i]<< endl;
     }
- }
   return 0;
 }
